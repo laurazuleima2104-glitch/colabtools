@@ -1,0 +1,76 @@
+import pandas as pd
+
+# 1) Definición GI
+definicion_df = pd.DataFrame([{
+    "Concepto": "Sistema gastrointestinal (GI)",
+    "Descripción": (
+        "Conjunto de órganos (boca, faringe, esófago, estómago, intestino delgado, intestino grueso, recto y ano) "
+        "y glándulas accesorias (hígado, vesícula, páncreas) encargados de digestión, absorción y excreción."
+    )
+}])
+
+# 2) Resumen CIE-10
+cie10_resumen = [
+    ("K00–K14", "Cavidad bucal y anexos", "Caries, gingivitis"),
+    ("K20–K31", "Esófago, estómago y duodeno", "ERGE, gastritis, úlceras"),
+    ("K35–K38", "Apendicitis", "Apendicitis aguda"),
+    ("K40–K46", "Hernias", "Hernia inguinal/umbilical"),
+    ("K50–K52", "Enteritis/colitis no infecciosa", "Crohn, colitis ulcerosa"),
+    ("K55–K63", "Otros trastornos intestinales", "Diverticulitis, SII, obstrucción"),
+    ("K70–K77", "Enfermedades del hígado", "Hepatitis, cirrosis, hígado graso"),
+    ("K80–K87", "Vesícula y páncreas", "Colelitiasis, pancreatitis"),
+    ("K90–K93", "Otros trastornos digestivos", "Enfermedad celíaca, malabsorción"),
+    ("A00–A09", "Infecciones intestinales", "Gastroenteritis infecciosa"),
+    ("B15–B19", "Hepatitis vírica", "Hepatitis A/B/C"),
+    ("C15–C26", "Neoplasias digestivas", "Tumores de esófago, estómago, colon, páncreas")
+]
+cie10_df = pd.DataFrame(cie10_resumen, columns=["Rango CIE-10", "Bloque", "Ejemplos"])
+
+# 3) Patologías con especialidad y cuidados de enfermería (ejemplos)
+patologias = [
+    {
+        "Patología": "ERGE",
+        "CIE-10": "K21",
+        "Definición": "Reflujo patológico del contenido gástrico al esófago.",
+        "Signos y síntomas": "Pirosis, regurgitación, disfagia, tos crónica.",
+        "Diagnóstico": "Clínico, endoscopia, pH-metría.",
+        "Tratamiento farmacológico": "IBP, antiácidos.",
+        "Tratamiento quirúrgico": "Funduplicatura en casos seleccionados.",
+        "Especialidad": "Gastroenterología, Cirugía general",
+        "Cuidados de Enfermería": (
+            "Educar sobre dieta y hábitos; administrar IBP; vigilar signos de alarma (sangrado, disfagia)."
+        )
+    },
+    {
+        "Patología": "Apendicitis aguda",
+        "CIE-10": "K35",
+        "Definición": "Inflamación aguda del apéndice.",
+        "Signos y síntomas": "Dolor en FID, fiebre, náuseas.",
+        "Diagnóstico": "Examen clínico, ecografía, TAC.",
+        "Tratamiento farmacológico": "Antibióticos perioperatorios.",
+        "Tratamiento quirúrgico": "Apendicectomía (habitualmente laparoscópica).",
+        "Especialidad": "Cirugía general",
+        "Cuidados de Enfermería": (
+            "Ayuno preoperatorio; monitorizar signos vitales; control del dolor; cuidados de herida; educación postoperatoria."
+        )
+    },
+    # Puedes añadir más patologías aquí...
+]
+patologias_df = pd.DataFrame(patologias)
+
+# Guardar en Excel
+ruta = "/content/Sistema_Gastrointestinal_Guia_Completa.xlsx"
+with pd.ExcelWriter(ruta, engine="openpyxl") as writer:
+    definicion_df.to_excel(writer, sheet_name="Definición GI", index=False)
+    cie10_df.to_excel(writer, sheet_name="Resumen CIE-10 GI", index=False)
+    patologias_df.to_excel(writer, sheet_name="Patologías", index=False)
+
+print("✅ Archivo creado en:", ruta)
+
+# Descargar (esto abrirá un diálogo de descarga en el navegador)
+try:
+    from google.colab import files
+    files.download(ruta)
+except Exception as e:
+    print("No fue posible descargar automáticamente (error):", e)
+    print("En la siguiente celda te muestro la alternativa para guardar en Google Drive.")
